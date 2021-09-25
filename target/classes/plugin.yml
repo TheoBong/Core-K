@@ -1,0 +1,5 @@
+name: Core
+description: KitPvP.CC's Core Plugin.
+version: git-Core-unknown
+author: [leuo, Cow]
+main: cc.kitpvp.core.Core

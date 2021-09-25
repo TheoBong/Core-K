@@ -1,0 +1,5 @@
+name: Core
+description: KitPvP.CC's Core Plugin.
+version: ${core.desc}
+author: [leuo, Cow]
+main: cc.kitpvp.core.Core

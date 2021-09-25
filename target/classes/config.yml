@@ -1,0 +1,19 @@
+networking:
+  mongo:
+    enabled: true
+    localhost: true #with no auth
+    uri: "mongodb://user:pass@127.0.0.1/core" #only used if localhost is false
+    db: "core"
+  redis:
+    enabled: true
+    host: "127.0.0.1"
+    port: 6379
+    channel: "core"
+
+general:
+  server_name: "KitPvP"
+  server_category: "kitpvp"
+  chat_cooldown: 2
+  chat_muted: false
+  namemc_api: "https://api.namemc.com/server/kitpvp.cc/likes?profile=<uuid>"
+  namemc_check: true
