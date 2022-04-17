@@ -1,5 +1,6 @@
 name: Core
 description: KitPvP.CC's Core Plugin.
-version: git-Core-unknown
+version: git-Core-816e9a9
 author: [leuo, Cow]
 main: cc.kitpvp.core.Core
+softdepend: [PlaceholderAPI]

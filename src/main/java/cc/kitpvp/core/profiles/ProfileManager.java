@@ -93,7 +93,7 @@ public class ProfileManager {
     public void push(boolean async, Profile profile, boolean unload) {
         MongoUpdate mu = new MongoUpdate("core_profiles", profile.getUuid());
         mu.setUpdate(profile.export());
-        core.getMongo().massUpdate(async, mu);
+        core.getMongo().mssUpdate(async, mu);
 
         JsonObject json = new JsonObject();
         json.addProperty("action", CoreRedisAction.PROFILE_UPDATE.toString());

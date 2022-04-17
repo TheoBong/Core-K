@@ -15,12 +15,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Mongo {
     private final Core core;
-    private MongoClient mongoClient;
-    private MongoDatabase mongoDatabase;
+    private final MongoDatabase mongoDatabase;
 
     public Mongo(Core core) {
         this.core = core;
 
+        MongoClient mongoClient;
         if (core.getConfig().getBoolean("networking.mongo.localhost")) {
             mongoClient = MongoClients.create(MongoClientSettings.builder().uuidRepresentation(UuidRepresentation.STANDARD).build());
             mongoDatabase = mongoClient.getDatabase(core.getConfig().getString("networking.mongo.db"));
@@ -35,14 +35,6 @@ public class Mongo {
         }
     }
 
-    public void createDocument(String collectionName, Object id, boolean async) {
-        ThreadUtil.runTask(async, core, () -> {
-            MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-            Document document = new Document("_id", id);
-
-            collection.insertOne(document);
-        });
-    }
 
     public void deleteDocument(boolean async, String collectionName, Object id) {
         ThreadUtil.runTask(async, core, () -> {
@@ -50,22 +42,6 @@ public class Mongo {
             Document document = new Document("_id", id);
 
             collection.deleteMany(document);
-        });
-    }
-
-    public void getOrCreateDocument(boolean async, String collectionName, Object id, MongoResult mongoResult) {
-        ThreadUtil.runTask(async, core, () -> {
-            MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
-            Document document = new Document("_id", id);
-
-            try (final MongoCursor<Document> cursor = collection.find(document).iterator()) {
-                if (cursor.hasNext()) {
-                    mongoResult.call(cursor.next());
-                } else {
-                    collection.insertOne(document);
-                    mongoResult.call(document);
-                }
-            }
         });
     }
 
@@ -111,23 +87,6 @@ public class Mongo {
                 mongoDatabase.createCollection(collectionName);
             }
         });
-    }
-
-    public void getOrCreateCollection(boolean async, String collectionName, MongoCollectionResult mcr) {
-        ThreadUtil.runTask(async, core, ()-> {
-            mongoDatabase.listCollectionNames().forEach(s -> {
-                if(s.equals(collectionName)) {
-                    mcr.call(mongoDatabase.getCollection(s));
-                }
-            });
-
-            mongoDatabase.createCollection(collectionName);
-            mcr.call(mongoDatabase.getCollection(collectionName));
-        });
-    }
-
-    public void getCollection(boolean async, String collectionName, MongoCollectionResult mcr) {
-        ThreadUtil.runTask(async, core, () -> mcr.call(mongoDatabase.getCollection(collectionName)));
     }
 
     public void getCollectionIterable(boolean async, String collectionName, MongoIterableResult mir) {

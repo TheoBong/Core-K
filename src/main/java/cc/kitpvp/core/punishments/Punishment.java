@@ -160,7 +160,7 @@ public @Data class Punishment {
                 jsonObject.put("fields", fields);
 
                 JSONObject footer = new JSONObject();
-                footer.put("text", "KitPvP.CC");
+                footer.put("text", "MCPanda.net");
                 footer.put("icon_url", "https://cdn.discordapp.com/avatars/553044388540973105/2334d4f212566d16c069d00620d7e4cc.png?size=1024");
                 jsonObject.put("footer", footer);
 
@@ -208,7 +208,7 @@ public @Data class Punishment {
                 jsonObject.put("fields", fields);
 
                 JSONObject footer = new JSONObject();
-                footer.put("text", "Inspect Element Ltd.");
+                footer.put("text", "MCPanda.net");
                 footer.put("icon_url", "https://cdn.discordapp.com/avatars/553044388540973105/2334d4f212566d16c069d00620d7e4cc.png?size=1024");
                 jsonObject.put("footer", footer);
 

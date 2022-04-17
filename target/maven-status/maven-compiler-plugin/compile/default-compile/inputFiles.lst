@@ -10,7 +10,6 @@ C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\friends\Fri
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\listeners\world\WeatherChangeListener.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\networking\redis\RedisPublisher.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\ranks\RemoveRankCommand.java
-C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\networking\mongo\MongoRequest.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\profiles\Settings.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\networking\CoreRedisAction.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\moderation\CheckPunishmentsCommand.java
@@ -60,10 +59,10 @@ C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\messaging\I
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\profiles\CorePermissibleBase.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\punishments\PunishmentManager.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\utils\ThreadUtil.java
-C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\general\ChannelCommand.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\commands\moderation\TempPunishCommand.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\networking\mongo\MongoResult.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\networking\redis\RedisSubscriber.java
+C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\papi\CoreExpansion.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\tags\TagManager.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\web\WebPlayer.java
 C:\Users\theob\GitHub\Core-KCC\src\main\java\cc\kitpvp\core\utils\ItemBuilder.java

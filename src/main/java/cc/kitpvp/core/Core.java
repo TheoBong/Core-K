@@ -28,6 +28,7 @@ import cc.kitpvp.core.networking.CoreRedisMessageListener;
 import cc.kitpvp.core.networking.mongo.Mongo;
 import cc.kitpvp.core.networking.redis.RedisPublisher;
 import cc.kitpvp.core.networking.redis.RedisSubscriber;
+import cc.kitpvp.core.papi.CoreExpansion;
 import cc.kitpvp.core.profiles.ProfileManager;
 import cc.kitpvp.core.punishments.PunishmentManager;
 import cc.kitpvp.core.ranks.RankManager;
@@ -108,6 +109,10 @@ public class Core extends JavaPlugin {
 
         this.filter = new Filter();
 
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new CoreExpansion(this).register();
+        }
+
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
             commandMapField.setAccessible(true);
@@ -161,7 +166,7 @@ public class Core extends JavaPlugin {
         registerCommand(new TagsCommand(this, "tags"));
 
         //Random
-        registerCommand(new SocialsCommand(this, "socials"));
+        registerCommand(new SocialsCommand("socials"));
         registerCommand(new FriendCommand(this, "friend"));
 
         this.coreRedisMessageListener = new CoreRedisMessageListener(this);

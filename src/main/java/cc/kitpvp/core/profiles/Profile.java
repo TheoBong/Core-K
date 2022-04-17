@@ -36,6 +36,7 @@ public @Data class Profile {
     private Map<Cooldown, Date> cooldowns;
 
     public Profile(UUID uuid) {
+        this.name = "null";
         this.uuid = uuid;
         this.settings = new Settings();
         this.ipHistory = new ArrayList<>();
@@ -199,6 +200,7 @@ public @Data class Profile {
 
     public void importFromDocument(Document d) {
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+
         setName(d.getString("name"));
         setCurrentIp(d.getString("current_ip"));
         setNameMc(d.getBoolean("name_mc"));

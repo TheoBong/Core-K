@@ -6,8 +6,8 @@ import lombok.Getter;
 
 public class RedisMessage {
 
-    private @Getter String internalChannel;
-    private @Getter JsonObject elements;
+    private final @Getter String internalChannel;
+    private final @Getter JsonObject elements;
 
     public RedisMessage(String channel, JsonObject elements) {
         this.internalChannel = channel;

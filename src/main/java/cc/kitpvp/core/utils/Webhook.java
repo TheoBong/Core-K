@@ -17,7 +17,7 @@ public class Webhook {
             OkHttpClient client = new OkHttpClient();
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), obj.toString());
             Request request = new Request.Builder()
-                    .url("https://discord.com/api/webhooks/887518026608566342/RgE2kKXuHBqZFn1jdR1CqCLs0nBA61TEO3Vz-Rqi5aNQr7N6tww7lnUwDlfQhwDkw9Pp")
+                    .url("https://discord.com/api/webhooks/923027883067330620/ObC1mAQyRi0XpJgsTY4FVWkyljEwq0TmTOJ2kql25iyfdK1bfnzPZvKN_JqBSzNnAa-D")
                     .post(body)
                     .build();
 

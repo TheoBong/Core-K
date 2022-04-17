@@ -12,7 +12,6 @@ public class RedisPublisher {
     private Jedis jedis;
     private final Core core;
     private @Getter Queue<RedisMessage> messageQueue;
-    private boolean running;
     public RedisPublisher(Jedis jedis, Core core) {
         this.jedis = jedis;
         this.core = core;
