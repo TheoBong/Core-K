@@ -1,6 +1,6 @@
 name: Core
-description: KitPvP.CC's Core Plugin.
+description: Core Plugin.
 version: ${core.desc}
 author: [leuo, Cow]
-main: cc.kitpvp.core.Core
+main: com.bongbong.core.CorePlugin
 softdepend: [PlaceholderAPI]

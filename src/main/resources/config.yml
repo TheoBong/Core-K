@@ -16,4 +16,4 @@ general:
   chat_cooldown: 2
   chat_muted: false
   namemc_api: "https://api.namemc.com/server/kitpvp.cc/likes?profile=<uuid>"
-  namemc_check: true
+  namemc_check: false
