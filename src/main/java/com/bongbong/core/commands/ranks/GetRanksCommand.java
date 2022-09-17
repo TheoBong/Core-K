@@ -6,7 +6,7 @@ import com.bongbong.core.profiles.Profile;
 import com.bongbong.core.ranks.Rank;
 import com.bongbong.core.utils.Colors;
 import com.bongbong.core.utils.ThreadUtil;
-import com.bongbong.core.web.WebPlayer;
+import com.bongbong.core.utils.WebPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

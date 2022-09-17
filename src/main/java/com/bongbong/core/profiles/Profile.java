@@ -1,7 +1,6 @@
 package com.bongbong.core.profiles;
 
 import com.bongbong.core.CorePlugin;
-import com.bongbong.core.punishments.Punishment;
 import com.bongbong.core.ranks.Rank;
 import com.bongbong.core.tags.Tag;
 import com.bongbong.core.tags.TagManager;
@@ -33,7 +32,7 @@ public @Data class Profile {
     private List<String> ipHistory;
     private HashMap<String, String> friends;
     private HashMap<String, String> pendingFriends;
-    private List<UUID> ignored, transactionIds, ranks, punishments, tags;
+    private List<UUID> ignored, transactionIds, ranks, tags;
     private Map<Cooldown, Date> cooldowns;
 
     public Profile(CorePlugin plugin, UUID uuid) {
@@ -47,7 +46,6 @@ public @Data class Profile {
         this.pendingFriends = new HashMap<>();
         this.transactionIds = new ArrayList<>();
         this.ranks = new ArrayList<>();
-        this.punishments = new ArrayList<>();
         this.tags = new ArrayList<>();
         this.cooldowns = new HashMap<>();
     }
@@ -104,37 +102,6 @@ public @Data class Profile {
         return ranks;
     }
 
-    public Punishment getActivePunishment(Punishment.Type type) {
-        for(Punishment punishment : getPunishments(type)) {
-            if (punishment.isActive()) {
-                return punishment;
-            }
-        }
-        return null;
-    }
-
-    public List<Punishment> getPunishments(Punishment.Type type) {
-        List<Punishment> punishments = new ArrayList<>();
-        for(UUID uuid : this.punishments) {
-            Punishment punishment = plugin.getPunishmentManager().getPunishment(uuid);
-            if(punishment != null && punishment.getType().equals(type)) {
-                punishments.add(punishment);
-            }
-        }
-        return punishments;
-    }
-
-    public List<Punishment> getPunishmentsTest() {
-        List<Punishment> punishments = new ArrayList<>();
-        for(UUID uuid : this.punishments) {
-            Punishment punishment = plugin.getPunishmentManager().getPunishment(uuid);
-            if(punishment != null) {
-                punishments.add(punishment);
-            }
-        }
-        return punishments;
-    }
-
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
@@ -161,16 +128,7 @@ public @Data class Profile {
         update();
     }
 
-    public Punishment punish(Punishment.Type type, UUID issuer, String reason, Date expires, boolean silent) {
-        Punishment punishment = plugin.getPunishmentManager().create(type, this, issuer, reason, expires, silent);
-        if(punishment != null) {
-            punishment.execute();
-        }
-        return punishment;
-    }
-
     public void update() {
-        punishments.removeIf(uuid -> plugin.getPunishmentManager().getPunishment(uuid) == null);
         ranks.removeIf(uuid -> plugin.getRankManager().getRank(uuid) == null);
         tags.removeIf(uuid -> plugin.getTagManager().getTag(uuid) == null);
 
@@ -220,7 +178,6 @@ public @Data class Profile {
         setTransactionIds(d.getList("transaction_ids", UUID.class));
         setRanks(d.getList("ranks", UUID.class));
         setTags(d.getList("tags", UUID.class));
-        setPunishments(d.getList("punishments", UUID.class));
     }
 
     public Map<String, Object> export() {
@@ -242,7 +199,6 @@ public @Data class Profile {
         map.put("transaction_ids", transactionIds);
         map.put("ranks", ranks);
         map.put("tags", tags);
-        map.put("punishments", punishments);
         return map;
     }
 }

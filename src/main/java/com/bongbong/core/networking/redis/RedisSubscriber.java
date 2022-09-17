@@ -10,15 +10,10 @@ import java.util.Set;
 
 public class RedisSubscriber {
 
-    private Jedis jedis;
-    private final CorePlugin plugin;
-
-    private JedisPubSub jedisPubSub;
-    private @Getter Set<RedisMessageListener> listeners;
-    private String rChannel;
+    private final JedisPubSub jedisPubSub;
+    private final @Getter Set<RedisMessageListener> listeners;
+    private final String rChannel;
     public RedisSubscriber(Jedis jedis, CorePlugin plugin) {
-        this.jedis = jedis;
-        this.plugin = plugin;
         this.listeners = new HashSet<>();
 
         this.rChannel = plugin.getConfig().getString("networking.redis.channel");

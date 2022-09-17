@@ -6,6 +6,7 @@ import com.bongbong.core.networking.mongo.MongoDeserializedResult;
 import com.bongbong.core.networking.mongo.MongoUpdate;
 import com.bongbong.core.networking.redis.RedisMessage;
 import com.bongbong.core.ranks.Rank;
+import com.bongbong.core.utils.ThreadUtil;
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -71,14 +72,10 @@ public class ProfileManager {
     }
 
     public void pull(boolean async, UUID uuid, boolean store, MongoDeserializedResult mdr) {
-        plugin.getMongo().getDocument(async, "core_profiles", uuid, document -> {
+        plugin.getMongo().getDocument(async, "core_profiles", "_id",  uuid, document -> {
             if(document != null) {
                 Profile profile = new Profile(plugin, uuid);
                 profile.importFromDocument(document);
-
-                for(UUID u : profile.getPunishments()) {
-                    plugin.getPunishmentManager().pull(false, u, true, obj -> {});
-                }
 
                 mdr.call(profile);
                 if(store) {
@@ -91,20 +88,23 @@ public class ProfileManager {
     }
 
     public void push(boolean async, Profile profile, boolean unload) {
-        MongoUpdate mu = new MongoUpdate("core_profiles", profile.getUuid());
-        mu.setUpdate(profile.export());
-        plugin.getMongo().massUpdate(async, mu);
+        ThreadUtil.runTask(async, plugin, () -> {
+            MongoUpdate mu = new MongoUpdate("core_profiles", profile.getUuid());
+            mu.setUpdate(profile.export());
+            plugin.getMongo().massUpdate(mu);
 
-        JsonObject json = new JsonObject();
-        json.addProperty("action", CoreRedisAction.PROFILE_UPDATE.toString());
-        json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
-        json.addProperty("uuid", profile.getUuid().toString());
+            JsonObject json = new JsonObject();
+            json.addProperty("action", CoreRedisAction.PROFILE_UPDATE.toString());
+            json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
+            json.addProperty("uuid", profile.getUuid().toString());
 
-        plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("core", json));
+            plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("core", json));
 
-        if(unload) {
-            profiles.remove(profile.getUuid());
-        }
+            if(unload) {
+                profiles.remove(profile.getUuid());
+            }
+        });
+
     }
 
     public void update() {

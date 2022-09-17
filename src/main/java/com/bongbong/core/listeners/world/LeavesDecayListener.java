@@ -7,9 +7,7 @@ import org.bukkit.event.block.LeavesDecayEvent;
 
 public class LeavesDecayListener implements Listener {
 
-    private final CorePlugin plugin;
     public LeavesDecayListener(CorePlugin plugin) {
-        this.plugin = plugin;
         plugin.registerListener(this);
     }
 

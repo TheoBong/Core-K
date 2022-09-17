@@ -10,7 +10,7 @@ import java.util.*;
 
 public @Data class Rank {
 
-    private final CorePlugin plugin;
+    private CorePlugin plugin;
     private final @Expose UUID uuid;
     private @Expose String name, displayName, prefix, color;
     private @Expose int weight;
@@ -59,7 +59,6 @@ public @Data class Rank {
                 perms.putAll(getParentPermissions(pRank, server));
             }
         }
-
         return perms;
     }
 

@@ -7,10 +7,6 @@ import com.bongbong.core.commands.messaging.ChatCommand;
 import com.bongbong.core.commands.messaging.IgnoreCommand;
 import com.bongbong.core.commands.messaging.MessageCommand;
 import com.bongbong.core.commands.messaging.UnignoreCommand;
-import com.bongbong.core.commands.moderation.CheckPunishmentsCommand;
-import com.bongbong.core.commands.moderation.PunishCommand;
-import com.bongbong.core.commands.moderation.TempPunishCommand;
-import com.bongbong.core.commands.moderation.UnpunishCommand;
 import com.bongbong.core.commands.ranks.AddRankCommand;
 import com.bongbong.core.commands.ranks.GetRanksCommand;
 import com.bongbong.core.commands.ranks.RankCommand;
@@ -30,12 +26,9 @@ import com.bongbong.core.networking.CoreRedisMessageListener;
 import com.bongbong.core.networking.mongo.Mongo;
 import com.bongbong.core.networking.redis.RedisPublisher;
 import com.bongbong.core.networking.redis.RedisSubscriber;
-import com.bongbong.core.papi.CoreExpansion;
 import com.bongbong.core.profiles.ProfileManager;
-import com.bongbong.core.punishments.PunishmentManager;
 import com.bongbong.core.ranks.RankManager;
 import com.bongbong.core.server.CoreServer;
-import com.bongbong.core.server.filter.Filter;
 import com.bongbong.core.tags.TagManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -66,11 +59,8 @@ public class CorePlugin extends JavaPlugin {
     public Gooey gooey;
 
     @Getter private ProfileManager profileManager;
-    @Getter private PunishmentManager punishmentManager;
     @Getter private RankManager rankManager;
     @Getter private TagManager tagManager;
-
-    @Getter private Filter filter;
 
     @Getter private CoreServer coreServer;
 
@@ -97,15 +87,8 @@ public class CorePlugin extends JavaPlugin {
         this.gooey = new Gooey(this);
 
         this.profileManager = new ProfileManager(this);
-        this.punishmentManager = new PunishmentManager(this);
         this.tagManager = new TagManager(this);
         this.rankManager = new RankManager(this);
-
-        this.filter = new Filter();
-
-        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new CoreExpansion(this).register();
-        }
 
         try {
             Field commandMapField = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -125,19 +108,12 @@ public class CorePlugin extends JavaPlugin {
 
         // General
         registerCommand(new ListCommand(this, "list"));
-        registerCommand(new ReportCommand(this, "report"));
         registerCommand(new SettingsCommand(this, "coresettings"));
 
         // Messaging
         registerCommand(new IgnoreCommand(this, "ignore"));
         registerCommand(new MessageCommand(this, "message"));
         registerCommand(new UnignoreCommand(this, "unignore"));
-
-        // Moderation
-        registerCommand(new CheckPunishmentsCommand(this, "checkpunishments"));
-        registerCommand(new PunishCommand(this, "punish"));
-        registerCommand(new TempPunishCommand(this, "temppunish"));
-        registerCommand(new UnpunishCommand(this, "unpunish"));
 
         // Ranks
         registerCommand(new AddRankCommand(this, "addrank"));

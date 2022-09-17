@@ -3,7 +3,6 @@ package com.bongbong.core.commands.messaging;
 import com.bongbong.core.CorePlugin;
 import com.bongbong.core.commands.BaseCommand;
 import com.bongbong.core.profiles.Profile;
-import com.bongbong.core.punishments.Punishment;
 import com.bongbong.core.utils.Colors;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -35,11 +34,6 @@ public class MessageCommand extends BaseCommand {
             Profile profile = plugin.getProfileManager().get(player.getUniqueId());
             Player target;
             String message;
-
-            if (profile.getActivePunishment(Punishment.Type.MUTE) != null) {
-                sender.sendMessage(ChatColor.RED + "You cannot message anyone as you are currently muted.");
-                return;
-            }
 
             if (!profile.getSettings().isPrivateMessages()) {
                 sender.sendMessage(ChatColor.RED + "You cannot message anyone because you have private messages disabled.");

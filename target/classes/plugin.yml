@@ -1,6 +1,5 @@
 name: Core
 description: Core Plugin.
-version: git-Core-5246025
+version: git-Core-c11475c
 author: [leuo, Cow]
 main: com.bongbong.core.CorePlugin
-softdepend: [PlaceholderAPI]

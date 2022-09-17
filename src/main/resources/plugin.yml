@@ -3,4 +3,3 @@ description: Core Plugin.
 version: ${core.desc}
 author: [leuo, Cow]
 main: com.bongbong.core.CorePlugin
-softdepend: [PlaceholderAPI]

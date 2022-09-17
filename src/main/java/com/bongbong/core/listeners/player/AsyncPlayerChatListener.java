@@ -4,7 +4,6 @@ import com.bongbong.core.CorePlugin;
 import com.bongbong.core.networking.CoreRedisAction;
 import com.bongbong.core.networking.redis.RedisMessage;
 import com.bongbong.core.profiles.Profile;
-import com.bongbong.core.punishments.Punishment;
 import com.bongbong.core.ranks.Rank;
 import com.bongbong.core.server.CoreServer;
 import com.bongbong.core.utils.Colors;
@@ -16,14 +15,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class AsyncPlayerChatListener implements Listener {
     private final CorePlugin plugin;
-
-    private final Pattern isInvalid = Pattern.compile("[^\\x00-\\x7F]+");
 
     public AsyncPlayerChatListener(CorePlugin plugin) {
         this.plugin = plugin;
@@ -66,12 +64,6 @@ public class AsyncPlayerChatListener implements Listener {
                 return;
             }
 
-            if(profile.getActivePunishment(Punishment.Type.MUTE) != null) {
-                event.setCancelled(true);
-                player.sendMessage(ChatColor.RED + "You cannot chat as you are muted.");
-                return;
-            }
-
             CoreServer coreServer = plugin.getCoreServer();
             if (!player.hasPermission("core.staff") && coreServer.isChatMuted()) {
                 event.setCancelled(true);
@@ -87,34 +79,12 @@ public class AsyncPlayerChatListener implements Listener {
                 String dateFormatted = String.format("%.1f seconds", seconds);
 
                 player.sendMessage(ChatColor.RED + "You're on chat cooldown for another: " + dateFormatted);
-                player.sendMessage(ChatColor.RED + "Purchase VIP rank to bypass chat cooldowns!");
                 return;
             } else if (!player.hasPermission("core.donor")) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(new Date());
                 calendar.add(Calendar.SECOND, 3);
                 profile.getCooldowns().put(Profile.Cooldown.CHAT, calendar.getTime());
-            }
-
-            if (Arrays.stream(event.getMessage().split("")).map(isInvalid::matcher).anyMatch(Matcher::matches)) {
-                event.setCancelled(true);
-                player.sendMessage(Colors.get("&cYou may not use unicode characters in chat."));
-                return;
-            }
-
-            String filteredReason = plugin.getFilter().isFiltered(event.getMessage());
-            if (filteredReason != null) {
-                event.setCancelled(true);
-
-                player.sendMessage("");
-                player.sendMessage(Colors.get("&cYour message: \"" + event.getMessage() + "\" has been filtered for " + filteredReason + ". Attempting to bypass the filter will result in punishment."));
-                player.sendMessage("");
-
-                JsonObject json = new JsonObject();
-                json.addProperty("action", CoreRedisAction.STAFF_BROADCAST.toString());
-                json.addProperty("message", "&7[Filtered] (" + plugin.getConfig().getString("general.server_name") + ") &r" + format);
-                plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("core", json));
-                return;
             }
 
             List<Player> toRemove = new ArrayList<>();

@@ -18,7 +18,7 @@ public class WhitelistCommand extends BaseCommand {
         super(name);
         this.plugin = plugin;
         this.setAliases("wl");
-        this.setUsage(Colors.get("&cUsage: /whitelist <staff/donors/off>"));
+        this.setUsage(Colors.get("&cUsage: /whitelist <staff/vips/donors/off>"));
     }
 
     @Override
@@ -41,10 +41,14 @@ public class WhitelistCommand extends BaseCommand {
                 settings.setWhitelistMode(WhitelistMode.NONE);
                 settings.export(plugin.getConfig());
                 break;
-            case "ranks":
-            case "vips":
             case "donors":
                 settings.setWhitelistMode(WhitelistMode.DONOR);
+                settings.export(plugin.getConfig());
+                break;
+            case "vips":
+            case "vip":
+            case "partners":
+                settings.setWhitelistMode(WhitelistMode.VIP);
                 settings.export(plugin.getConfig());
                 break;
             case "staff":

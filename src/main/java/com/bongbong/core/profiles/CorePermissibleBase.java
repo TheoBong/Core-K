@@ -15,19 +15,15 @@ public class CorePermissibleBase extends PermissibleBase {
 
     @Override
     public boolean hasPermission(String inName) {
-        boolean b = isOp() || super.hasPermission(inName);
-        String perm = inName.toLowerCase();
+        if (isOp()) return true;
 
         for(PermissionAttachmentInfo permission : player.getEffectivePermissions()) {
             String p = permission.getPermission().toLowerCase();
-            if(p.endsWith("*")) {
-                String subP = perm.substring(0, perm.length() == 1 ? 0 : perm.length() - 2);
-                if(perm.startsWith(subP)) {
-                    b = true;
-                }
+            if(p.equals("*")) {
+                return true;
             }
         }
 
-        return b;
+        return super.hasPermission(inName);
     }
 }

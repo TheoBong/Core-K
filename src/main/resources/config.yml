@@ -12,6 +12,7 @@ networking:
 
 general:
   server_name: "KitPvP"
+  online_mode: true
   server_category: "kitpvp"
   chat_cooldown: 2
   chat_muted: false

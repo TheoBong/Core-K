@@ -7,8 +7,8 @@ import java.util.List;
 
 public class CommandHelper {
 
-    private String firstLine;
-    private List<String> entries;
+    private final String firstLine;
+    private final List<String> entries;
     public CommandHelper(String firstLine) {
         this.firstLine = firstLine;
         this.entries = new LinkedList<>();

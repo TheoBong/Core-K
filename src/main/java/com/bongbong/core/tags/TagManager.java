@@ -6,6 +6,7 @@ import com.bongbong.core.networking.mongo.Mongo;
 import com.bongbong.core.networking.mongo.MongoDeserializedResult;
 import com.bongbong.core.networking.mongo.MongoUpdate;
 import com.bongbong.core.networking.redis.RedisMessage;
+import com.bongbong.core.utils.ThreadUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -65,7 +66,7 @@ public class TagManager {
     }
 
     public void pull(boolean async, UUID uuid, MongoDeserializedResult mdr) {
-        plugin.getMongo().getDocument(async, "core_tags", uuid, document -> {
+        plugin.getMongo().getDocument(async, "core_tags", "_id", uuid, document -> {
             if(document != null) {
                 Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
                 Tag tag = gson.fromJson(document.getString("elements"), Tag.class);
@@ -80,18 +81,20 @@ public class TagManager {
     }
 
     public void push(boolean async, Tag tag) {
-        MongoUpdate mu = new MongoUpdate("core_tags", tag.getUuid());
-        mu.put("elements", tag.serialize());
-        plugin.getMongo().massUpdate(async, mu);
+        ThreadUtil.runTask(async, plugin, () -> {
+            MongoUpdate mu = new MongoUpdate("core_tags", tag.getUuid());
+            mu.put("elements", tag.serialize());
+            plugin.getMongo().massUpdate(mu);
 
-        JsonObject json = new JsonObject();
-        json.addProperty("action", CoreRedisAction.TAG_UPDATE.toString());
-        json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
-        json.addProperty("tag", tag.getUuid().toString());
+            JsonObject json = new JsonObject();
+            json.addProperty("action", CoreRedisAction.TAG_UPDATE.toString());
+            json.addProperty("fromServer", plugin.getConfig().getString("general.server_name"));
+            json.addProperty("tag", tag.getUuid().toString());
 
-        plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("core", json));
+            plugin.getRedisPublisher().getMessageQueue().add(new RedisMessage("core", json));
 
-        plugin.getProfileManager().update();
+            plugin.getProfileManager().update();
+        });
     }
 
     public void remove(boolean async, Tag tag) {

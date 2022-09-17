@@ -4,7 +4,10 @@ import com.bongbong.core.CorePlugin;
 import com.bongbong.core.utils.ThreadUtil;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import com.mongodb.client.*;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
@@ -45,33 +48,31 @@ public class Mongo {
         });
     }
 
-    public void getDocument(boolean async, String collectionName, Object id, MongoResult mongoResult) {
+    public void getDocument(boolean async, String collectionName, String id, Object value, MongoResult mongoResult) {
         ThreadUtil.runTask(async, plugin, () -> {
             MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
-            if (collection.find(Filters.eq("_id", id)).iterator().hasNext()) {
-                mongoResult.call(collection.find(Filters.eq("_id", id)).first());
+            if (collection.find(Filters.eq(id, value)).iterator().hasNext()) {
+                mongoResult.call(collection.find(Filters.eq(id, value)).first());
             } else {
                 mongoResult.call(null);
             }
         });
     }
 
-    public void massUpdate(boolean async, MongoUpdate mongoUpdate) {
-        massUpdate(async, mongoUpdate.getCollectionName(), mongoUpdate.getId(), mongoUpdate.getUpdate());
+    public void massUpdate(MongoUpdate mongoUpdate) {
+        massUpdate(mongoUpdate.getCollectionName(), mongoUpdate.getId(), mongoUpdate.getUpdate());
     }
 
-    public void massUpdate(boolean async, String collectionName, Object id, Map<String, Object> updates) throws LinkageError {
-        ThreadUtil.runTask(async, plugin, () -> {
-            final MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
+    public void massUpdate(String collectionName, Object id, Map<String, Object> updates) throws LinkageError {
+        final MongoCollection<Document> collection = mongoDatabase.getCollection(collectionName);
 
-            Document document = collection.find(new Document("_id", id)).first();
-            if(document == null) {
-                collection.insertOne(new Document("_id", id));
-            }
+        Document document = collection.find(new Document("_id", id)).first();
+        if(document == null) {
+            collection.insertOne(new Document("_id", id));
+        }
 
-            updates.forEach((key, value) -> collection.updateOne(Filters.eq("_id", id), Updates.set(key, value)));
-        });
+        updates.forEach((key, value) -> collection.updateOne(Filters.eq("_id", id), Updates.set(key, value)));
     }
 
     public void createCollection(boolean async, String collectionName) {

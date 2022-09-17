@@ -5,7 +5,8 @@ import com.bongbong.core.commands.BaseCommand;
 import com.bongbong.core.profiles.Profile;
 import com.bongbong.core.tags.Tag;
 import com.bongbong.core.utils.Colors;
-import com.bongbong.core.web.WebPlayer;
+import com.bongbong.core.utils.ThreadUtil;
+import com.bongbong.core.utils.WebPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -27,8 +28,12 @@ public class AddTagCommand extends BaseCommand {
             return;
         }
 
-        if(args.length > 1) {
+        if (args.length != 2) {
+            sender.sendMessage(ChatColor.RED + "Usage: /addtag <target> <tag>");
+            return;
+        }
 
+        ThreadUtil.runTask(true, plugin, () -> {
             Player target = Bukkit.getPlayer(args[0]);
             Profile profile;
             if(target != null) {
@@ -52,6 +57,7 @@ public class AddTagCommand extends BaseCommand {
             if(tag != null) {
                 if(!profile.getTags().contains(tag.getUuid())) {
                     profile.getTags().add(tag.getUuid());
+                    plugin.getProfileManager().push(true, profile, false);
                     sender.sendMessage(ChatColor.WHITE + profile.getName() + ChatColor.GREEN + " now owns the tag " + Colors.get(tag.getColor() + tag.getDisplayName()) + ChatColor.GREEN + ".");
                 } else {
                     sender.sendMessage(ChatColor.RED + "The target you specified already owns that tag.");
@@ -59,8 +65,7 @@ public class AddTagCommand extends BaseCommand {
             } else {
                 sender.sendMessage(ChatColor.RED + "The tag you specified does not exist.");
             }
-        } else {
-            sender.sendMessage(ChatColor.RED + "Usage: /addtag <target> <tag>");
-        }
+        });
+
     }
 }

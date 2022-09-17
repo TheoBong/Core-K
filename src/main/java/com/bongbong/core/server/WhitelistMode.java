@@ -23,6 +23,15 @@ public enum WhitelistMode {
             return map.containsKey("core.donor");
         }
     },
+    VIP("partners") {
+        @Override
+        public boolean allowLogin(CorePlugin plugin, Profile profile) {
+            Map<String, Boolean> map = profile.getHighestRank().getAllPermissions(plugin.getConfig().getString("general.server_category"));
+            if (map == null) return false;
+
+            return map.containsKey("core.vip");
+        }
+    },
 
     STAFF("staff") {
         @Override
@@ -49,6 +58,8 @@ public enum WhitelistMode {
             case 2:
                 return DONOR;
             case 3:
+                return VIP;
+            case 4:
                 return STAFF;
             default:
                 return NONE;
@@ -61,8 +72,10 @@ public enum WhitelistMode {
                 return 1;
             case DONOR:
                 return 2;
-            case STAFF:
+            case VIP:
                 return 3;
+            case STAFF:
+                return 4;
             default:
                 return 0;
         }

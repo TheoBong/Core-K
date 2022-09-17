@@ -4,7 +4,6 @@ import com.bongbong.core.CorePlugin;
 import com.bongbong.core.networking.redis.RedisMessage;
 import com.bongbong.core.networking.redis.RedisMessageListener;
 import com.bongbong.core.profiles.Profile;
-import com.bongbong.core.utils.ClickableMessage;
 import com.bongbong.core.utils.Colors;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
@@ -74,28 +73,6 @@ public class CoreRedisMessageListener implements RedisMessageListener {
                 switch(action) {
                     case BROADCAST:
                         Bukkit.broadcastMessage(Colors.get(json.get("message").getAsString()));
-                        break;
-                    case PUNISHMENT:
-                        for(Profile profile : plugin.getProfileManager().getProfiles().values()) {
-                            Player player = profile.getPlayer();
-                            if(player != null && player.isOnline() && player.hasPermission("core.staff") && profile.getSettings().isStaffMessages()) {
-                                final ClickableMessage punish = new ClickableMessage(Colors.get(json.get("message").getAsString()))
-                                        .hover(Colors.get(json.get("hover").getAsString()));
-                                punish.sendToPlayer(player);
-                            } else if (player != null) {
-                                player.sendMessage(Colors.get(json.get("message").getAsString()));
-                            }
-                        }
-                        break;
-                    case PUNISHMENT_SILENT:
-                        for(Profile profile : plugin.getProfileManager().getProfiles().values()) {
-                            Player player = profile.getPlayer();
-                            if(player != null && player.isOnline() && player.hasPermission("core.staff") && profile.getSettings().isStaffMessages()) {
-                                final ClickableMessage punish = new ClickableMessage(Colors.get(json.get("message").getAsString()))
-                                        .hover(Colors.get(json.get("hover").getAsString()));
-                                punish.sendToPlayer(player);
-                            }
-                        }
                         break;
                     case STAFF_BROADCAST:
                         for(Profile profile : plugin.getProfileManager().getProfiles().values()) {

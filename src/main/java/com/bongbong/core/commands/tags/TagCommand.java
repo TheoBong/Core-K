@@ -4,6 +4,7 @@ import com.bongbong.core.CorePlugin;
 import com.bongbong.core.commands.BaseCommand;
 import com.bongbong.core.tags.Tag;
 import com.bongbong.core.utils.Colors;
+import com.bongbong.core.utils.ThreadUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -40,7 +41,12 @@ public class TagCommand extends BaseCommand {
             return;
         }
 
-        if(args.length > 0) {
+        if(args.length == 0) {
+            sender.sendMessage(getCommandHelper().getMessage(1));
+            return;
+        }
+
+        ThreadUtil.runTask(true, plugin, () -> {
             switch(args[0].toLowerCase()) {
                 case "list":
                     if(plugin.getTagManager().getTags().size() > 0) {
@@ -206,8 +212,6 @@ public class TagCommand extends BaseCommand {
                 default:
                     sender.sendMessage(getCommandHelper().getMessage(1));
             }
-        } else {
-            sender.sendMessage(getCommandHelper().getMessage(1));
-        }
+        });
     }
 }

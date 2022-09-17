@@ -7,9 +7,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 
 public class WeatherChangeListener implements Listener {
 
-    private final CorePlugin plugin;
     public WeatherChangeListener(CorePlugin plugin) {
-        this.plugin = plugin;
         plugin.registerListener(this);
     }
 
